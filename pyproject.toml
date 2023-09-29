@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "jobfinder"
+version = "0.1.0"
+description = ""
+authors = ["Marius <m.gzegozevskis@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.103.2"
+uvicorn = "^0.23.2"
+alembic = "^1.12.0"
+sqlmodel="^0.0.8"
+asyncpg="^0.28.0"
+bcrypt="^3.2.0"
+email-validator="^1.1.3"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
