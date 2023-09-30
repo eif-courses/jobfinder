@@ -1,7 +1,10 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import EmailStr
 from sqlmodel import SQLModel
+
+from data_types.models import Skill, User
 
 
 class Token(SQLModel):
@@ -22,6 +25,11 @@ class DisplayUser(SQLModel):
 class DisplayPost(SQLModel):
     title: str
     content: str
-    created_at: str
-    updated_at: str
+    created_at: datetime
+    updated_at: datetime
     user: DisplayUser
+
+
+class DisplaySkills(SQLModel):
+    skill: Skill
+    user: User

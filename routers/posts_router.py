@@ -30,7 +30,7 @@ async def create_new_post(post: Post,
     if not fetch_user_info:
         raise HTTPException(status_code=400, detail="You not allowed to create post!")
 
-    new_post = Post(title=post.title, content=post.content, user_id=user.id)
+    new_post = Post(title=post.title, content=post.content, user_id=user.id, created_at=post.created_at, updated_at=post.updated_at)
 
     db.add(new_post)
     await db.commit()

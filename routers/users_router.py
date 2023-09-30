@@ -7,27 +7,53 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 from starlette.exceptions import HTTPException
 
-from data_types.schema import DisplayUser
+from data_types.schema import DisplayUser, DisplaySkills
 from utils.jwt import create_access_token, get_current_user
 from utils.db import get_session
-from data_types.models import User
+from data_types.models import User, Skill, UserSkillLink
 
 router = APIRouter(tags=["Users"], prefix="/api/v1/users")
 
 
 @router.post("/", response_model=User)
-async def create_user(user: User, db: AsyncSession = Depends(get_session)):
+async def create_user(user: User, skills: List[Skill], db: AsyncSession = Depends(get_session)):
     is_user_exists = await db.execute(select(User).where(User.email == user.email))
     if is_user_exists.first():
         raise HTTPException(status_code=400, detail="User already exists!")
 
     hashed_password = hashpw(user.password.encode('utf-8'), gensalt())
-    new_user = User(username=user.username, email=user.email, password=hashed_password.decode('utf-8'))
+    new_user = User(username=user.username, email=user.email,
+                    password=hashed_password.decode('utf-8'),
+                    created_at=user.created_at,
+                    updated_at=user.updated_at,
+                    skills=skills)
 
     db.add(new_user)
     await db.commit()
     await db.refresh(new_user)
     return new_user
+
+
+@router.get("/my/skills", response_model=List[Skill])
+async def display_my_skills(db: AsyncSession = Depends(get_session),
+                            current_user: User = Depends(get_current_user)):
+    result = await db.execute(select(User).where(User.email == current_user.email))
+    user = result.first()[0]
+    if user is None:
+        raise HTTPException(status_code=401, detail="Wrong Credentials!")
+
+    stmt = (
+        select(Skill)
+        .select_from(User)
+        .outerjoin(UserSkillLink, User.id == UserSkillLink.user_id)
+        .outerjoin(Skill, Skill.id == UserSkillLink.skill_id)
+        .where(User.id == user.id)
+    )
+
+    result = await db.execute(stmt)
+    skills = result.scalars().all()
+
+    return skills
 
 
 @router.get("/", response_model=List[DisplayUser])
