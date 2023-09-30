@@ -3,7 +3,8 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlmodel import SQLModel, create_engine
-from user.models import User, Profile, Post, Category, Skill
+from user.models import User, Profile
+from post.models import Post, Category, Skill
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

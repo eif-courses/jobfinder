@@ -1,5 +1,3 @@
-import os
-
 from sqlmodel import SQLModel, create_engine
 from sqlmodel.ext.asyncio.session import AsyncSession, AsyncEngine
 

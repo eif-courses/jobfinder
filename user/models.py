@@ -1,40 +1,15 @@
-from datetime import datetime
 from typing import Optional, List
 
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel, Relationship
 
 
-class Category(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    name: str
-    posts: List["Post"] = Relationship(back_populates="category")
-
-
-class Skill(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    profile_id: int = Field(foreign_key="profile.id")
-    profile: "Profile" = Relationship(back_populates="skills")
-    name: str
-
-
 class Profile(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     bio: str
-    skills: List[Skill] = Relationship(back_populates="profile")
+    skills: List["Skill"] = Relationship(back_populates="profile")
     user: "User" = Relationship(back_populates="profile")
     user_id: int = Field(foreign_key="user.id")
-
-
-class Post(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
-    user_id: int = Field(foreign_key="user.id")
-    category_id: int = Field(foreign_key="category.id")
-    content: str
-    created_at: datetime = datetime.now()
-    updated_at: datetime = datetime.now()
-    category: Category = Relationship(back_populates="posts")
-    user: "User" = Relationship(back_populates="posts")
 
 
 class User(SQLModel, table=True):
@@ -43,5 +18,11 @@ class User(SQLModel, table=True):
     email: EmailStr = Field(unique=True)
     password: str
     profile: "Profile" = Relationship(back_populates="user")
-    posts: List[Post] = Relationship(back_populates="user")
+    posts: List["Post"] = Relationship(back_populates="user")
     permissions: str = Field(default="member")
+
+
+class UserLogin(SQLModel):
+    username: str
+    email: EmailStr
+    password: str
