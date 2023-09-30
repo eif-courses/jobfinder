@@ -36,6 +36,7 @@ class User(SQLModel, table=True):
 class Category(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
+    posts: List["Post"] = Relationship(back_populates="category")
 
 
 class Skill(SQLModel, table=True):
@@ -59,5 +60,7 @@ class Post(SQLModel, table=True):
         server_default=text("CURRENT_TIMESTAMP"),
         server_onupdate=text("CURRENT_TIMESTAMP"),
     ))
+    category_id: Optional[int] = Field(default=None, foreign_key="category.id")
     user_id: Optional[int] = Field(default=None, foreign_key="user.id")
     user: Optional["User"] = Relationship(back_populates="posts")
+    category: Optional[Category] = Relationship(back_populates="posts")

@@ -88,6 +88,7 @@ async def create_new_skill(skill: Skill,
     return new_skill
 
 
+@router.head("/skills", response_model=List[Skill])
 @router.get("/skills", response_model=List[Skill])
 async def display_skills(skip: int = 0, limit: int = 10,
                          db: AsyncSession = Depends(get_session),
