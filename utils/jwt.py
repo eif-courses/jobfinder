@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from starlette import status
 
-from auth.models import TokenData
+from data_types.schema import TokenData
 
 SECRET_KEY = "labas"
 ALGORITHM = "HS256"

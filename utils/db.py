@@ -3,7 +3,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession, AsyncEngine
 
 from sqlalchemy.orm import sessionmaker
 
-import config
+import utils.config as config
 
 DATABASE_NAME = config.DATABASE_NAME
 DATABASE_HOST = config.DATABASE_HOST
