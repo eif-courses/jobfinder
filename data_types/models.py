@@ -17,7 +17,7 @@ class User(SQLModel, table=True):
     username: str = Field(index=True)
     email: EmailStr = Field(unique=True)
     password: str
-    permissions: str = Field(default="member")
+    permissions: List[str] = ["read:items"]
     created_at: Optional[datetime] = Field(sa_column=Column(
         TIMESTAMP(timezone=True),
         nullable=False,
