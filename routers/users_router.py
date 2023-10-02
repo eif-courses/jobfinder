@@ -62,7 +62,7 @@ async def display_my_skills(db: AsyncSession = Depends(get_session),
 @router.get("/", response_model=List[DisplayUser])
 async def read_users(skip: int = 0, limit: int = 10,
                      db: AsyncSession = Depends(get_session),
-                     authorize: TokenData = Depends(PermissionChecker(required_permissions=["read:items","read:admin"]))
+                     authorize: TokenData = Depends(PermissionChecker(required_permissions=["read:items","super:admin"]))
                      ):
     users_result = await db.execute(select(User).offset(skip).limit(limit))
     users = users_result.scalars().all()
