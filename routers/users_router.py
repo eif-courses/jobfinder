@@ -7,10 +7,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 from starlette.exceptions import HTTPException
 
-from data_types.schema import DisplayUser
+from data_types.schema import DisplayUser, TokenData
 from utils.jwt import create_access_token, get_current_user
 from utils.db import get_session
 from data_types.models import User, Skill, UserSkillLink
+from utils.permission_cheker import PermissionChecker
 
 router = APIRouter(tags=["Users"], prefix="/api/v1/users")
 
@@ -37,7 +38,8 @@ async def create_user(user: User, skills: List[Skill], db: AsyncSession = Depend
 
 @router.get("/my/skills", response_model=List[Skill])
 async def display_my_skills(db: AsyncSession = Depends(get_session),
-                            current_user: User = Depends(get_current_user)):
+                            current_user: TokenData = Depends(
+                                PermissionChecker(required_permissions=["read:items"]))):
     result = await db.execute(select(User).where(User.email == current_user.email))
     user = result.first()[0]
     if user is None:
@@ -58,10 +60,12 @@ async def display_my_skills(db: AsyncSession = Depends(get_session),
 
 
 @router.get("/", response_model=List[DisplayUser])
-async def read_users(skip: int = 0, limit: int = 10, db: AsyncSession = Depends(get_session)):
+async def read_users(skip: int = 0, limit: int = 10,
+                     db: AsyncSession = Depends(get_session),
+                     authorize: TokenData = Depends(PermissionChecker(required_permissions=["read:items","read:admin"]))
+                     ):
     users_result = await db.execute(select(User).offset(skip).limit(limit))
     users = users_result.scalars().all()
-    print(users)
     return users
 
 
@@ -80,5 +84,5 @@ async def login(request: OAuth2PasswordRequestForm = Depends(), db: AsyncSession
 
 
 @router.get("/me")
-async def users_me(current_user: User = Depends(get_current_user)):
+async def users_me(current_user: TokenData = Depends(get_current_user)):
     return current_user
