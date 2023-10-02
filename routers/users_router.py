@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 from starlette.exceptions import HTTPException
 
-from data_types.schema import DisplayUser, DisplaySkills
+from data_types.schema import DisplayUser
 from utils.jwt import create_access_token, get_current_user
 from utils.db import get_session
 from data_types.models import User, Skill, UserSkillLink
@@ -26,7 +26,8 @@ async def create_user(user: User, skills: List[Skill], db: AsyncSession = Depend
                     password=hashed_password.decode('utf-8'),
                     created_at=user.created_at,
                     updated_at=user.updated_at,
-                    skills=skills)
+                    skills=skills,
+                    permissions=user.permissions)
 
     db.add(new_user)
     await db.commit()

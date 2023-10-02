@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import EmailStr
 from sqlmodel import SQLModel
@@ -19,7 +19,7 @@ class TokenData(SQLModel):
 class DisplayUser(SQLModel):
     username: str
     email: EmailStr
-    permissions: str
+    permissions: Optional[List[str]]
 
 
 class DisplayPost(SQLModel):

@@ -2,7 +2,8 @@ from datetime import datetime
 
 from typing import Optional, List
 from pydantic import EmailStr
-from sqlalchemy import Column, text
+from sqlalchemy import Column, text, String
+from sqlalchemy.dialects import postgresql
 from sqlalchemy.dialects.postgresql import TIMESTAMP
 from sqlmodel import Field, SQLModel, Relationship
 
@@ -17,7 +18,8 @@ class User(SQLModel, table=True):
     username: str = Field(index=True)
     email: EmailStr = Field(unique=True)
     password: str
-    permissions: List[str] = ["read:items"]
+    permissions: Optional[List[str]] = Field(default=['read:items', 'write:items'],
+                                             sa_column=Column(postgresql.ARRAY(String())))
     created_at: Optional[datetime] = Field(sa_column=Column(
         TIMESTAMP(timezone=True),
         nullable=False,
