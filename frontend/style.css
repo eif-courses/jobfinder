@@ -1,0 +1,136 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+     background: beige;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 1em;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1em;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 600px) {
+    nav ul {
+        text-align: center;
+    }
+
+    nav ul li {
+        display: block;
+        margin-bottom: 10px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    header {
+        padding: 0.5em;
+    }
+
+    section {
+        padding: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    footer {
+        position: static;
+    }
+}
+
+.menu-toggle {
+    display: none; /* Hide by default for larger screens */
+    cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    nav ul {
+        text-align: center;
+        display: none; /* Hide the nav links by default for small screens */
+    }
+
+    nav ul.show {
+        display: block; /* Show the nav links when the menu is toggled */
+    }
+
+    .menu-toggle {
+        display: block; /* Show the hamburger menu button for small screens */
+        font-size: 1.5em;
+        margin-right: 20px;
+    }
+}
+
+a:link {
+    color: whitesmoke!important;
+}
+a.active{
+    color: gold!important;
+}
+
+button {
+    background: beige;
+    padding: 0.4em;
+}
+button:hover{
+    background: gold;
+    padding: 0.4em;
+}
+section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40vh;
+    background: beige;
+}
+.login-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 30em;
+}
+
+.login-form {
+    padding: 20px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #555;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Home Page</title>
+    <title>Prisijungimo langas</title>
 </head>
 <body>
 <header>
@@ -13,23 +13,32 @@
         <div class="menu-toggle">&#9776;</div>
         <ul>
             <li><h2>IT darbo paieška</h2></li>
-            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="posts.html">Posts</a></li>
-            <li>
-                <button onclick="window.location.href='/jobfinder/frontend/login.html'">Prisijungti</button>
-            </li>
-
+            <li><button onclick="window.location.href='/jobfinder/frontend/login.html'">Prisijungti</button></li>
         </ul>
     </nav>
 </header>
 
 <section>
-    <h2>Welcome to My Website!</h2>
-    <p>This is the home page content.</p>
+
+    <div class="login-container">
+        <form class="login-form">
+            <h2>Prisijunkite</h2>
+            <label for="email">El. paštas</label>
+            <input type="text" id="email" name="email" required>
+
+            <label for="password">Slaptažodis</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Jungtis</button>
+        </form>
+    </div>
+
 </section>
 
 <footer>
-    <p>&copy; 2023 My Website. All rights reserved.</p>
+    <p>&copy; 2023 Interneto svetainė.</p>
 </footer>
 
 <script>
@@ -41,5 +50,6 @@
         });
     });
 </script>
+<script src="app.js"></script>
 </body>
 </html>
