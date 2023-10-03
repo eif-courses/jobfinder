@@ -34,12 +34,45 @@ class User(SQLModel, table=True):
     posts: List["Post"] = Relationship(back_populates="user")
     skills: List["Skill"] = Relationship(back_populates="users", link_model=UserSkillLink)
 
+    class Config:
+        schema_extra = {
+            "examples": [
+                {
+                    "user": {
+                        "username": "string",
+                        "email": "user@example.com",
+                        "password": "string",
+                        "permissions": [
+                            "read:items",
+                            "write:items"
+                        ],
+                        "created_at": "2023-10-03T07:30:38.594Z",
+                        "updated_at": "2023-10-03T07:30:38.594Z"
+                    },
+                    "skills": [
+                        {
+                            "id": 0,
+                            "name": "string"
+                        }
+                    ]
+                }
+            ]
+        }
+
 
 class Category(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     posts: List["Post"] = Relationship(back_populates="category")
 
+    class Config:
+        schema_extra = {
+            "examples": [
+                {
+                    "name": "Foo",
+                }
+            ]
+        }
 
 class Skill(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

@@ -12,6 +12,7 @@ from utils.jwt import get_current_user
 
 
 class PermissionChecker:
+
     def __init__(self, required_permissions: List[str]) -> None:
         self.required_permissions = required_permissions
 
