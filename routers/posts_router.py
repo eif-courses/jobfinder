@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlmodel import select
 from starlette.exceptions import HTTPException
+from starlette.responses import Response
 
 from data_types.schema import DisplayPost, TokenData
 from utils.jwt import get_current_user
@@ -29,11 +30,12 @@ async def create_new_post(post: Post,
     #     raise HTTPException(status_code=400, detail="Category not exists!")
 
     fetch_user_info = await db.execute(select(User).where(User.email == current_user.email))
-    user = fetch_user_info.first()[0] # skaitom pirmą elementą iš eilutės
+    user = fetch_user_info.first()[0]  # skaitom pirmą elementą iš eilutės
     if not fetch_user_info:
         raise HTTPException(status_code=400, detail="You not allowed to create post!")
 
-    new_post = Post(title=post.title, content=post.content, user_id=user.id, created_at=post.created_at, updated_at=post.updated_at)
+    new_post = Post(title=post.title, content=post.content, user_id=user.id, created_at=post.created_at,
+                    updated_at=post.updated_at)
 
     db.add(new_post)
     await db.commit()
@@ -63,6 +65,36 @@ async def display_categories(skip: int = 0, limit: int = 10,
     categories_result = await db.execute(select(Category).offset(skip).limit(limit))
     categories = categories_result.scalars().all()
     return categories
+
+
+@router.put("/categories/{category_name}")
+async def update_category(category_name: str,
+                          new_category_name: str,
+                          db: AsyncSession = Depends(get_session),
+                          current_user: TokenData = Depends(get_current_user)):
+    fetch_category_info = await db.execute(select(Category).where(Category.name == category_name))
+    category = fetch_category_info.first()[0]
+    if not category:
+        raise HTTPException(status_code=400, detail="Category not exists!")
+
+    category.name = new_category_name
+    await db.commit()
+    await db.refresh(category)
+    return new_category_name
+
+
+@router.delete("/categories/{category_name}")
+async def delete_category(category_name: str,
+                          db: AsyncSession = Depends(get_session),
+                          current_user: TokenData = Depends(get_current_user)):
+    fetch_category_info = await db.execute(select(Category).where(Category.name == category_name))
+    category = fetch_category_info.first()[0]
+    if not category:
+        raise HTTPException(status_code=400, detail="Category not exists!")
+
+    await db.delete(category)
+    await db.commit()
+    return Response(status_code=204)
 
 
 @router.get("/", response_model=List[DisplayPost])
