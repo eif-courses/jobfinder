@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 
-from routers import posts_router, users_router
+from routers import posts_router, users_router, website_router
 
 app = FastAPI(docs_url="/", title="Find Your Dream Job", version="0.0.2")
 
@@ -21,3 +21,4 @@ app.add_middleware(
 
 app.include_router(router=posts_router.router)
 app.include_router(router=users_router.router)
+app.include_router(router=website_router.router)
